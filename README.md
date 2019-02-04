@@ -1,6 +1,6 @@
 # Adafruit_SSD1306 (64x48 fork) [![Build Status](https://travis-ci.org/adafruit/Adafruit_SSD1306.svg?branch=master)](https://travis-ci.org/adafruit/Adafruit_SSD1306)
 
-**This fork adds support for 64x48 Wemos OLED Displays. I have only tested it with this particular display and can't guarantee that it will still work with other models.**
+**Please note: This fork adds support for 64x48 Wemos OLED Displays. Although I was very careful to leave everything intact I have only tested it with this particular display and can't guarantee that it will still work with other models.**
 
 This is a library for our Monochrome OLEDs based on SSD1306 drivers
 
