@@ -561,6 +561,13 @@ boolean Adafruit_SSD1306::begin(uint8_t vcs, uint8_t addr, boolean reset,
       SSD1306_SETCONTRAST };              // 0x81
     ssd1306_commandList(init4c, sizeof(init4c));
     ssd1306_command1((vccstate == SSD1306_EXTERNALVCC) ? 0x10 : 0xAF);
+  } else if((WIDTH == 64) && (WIDTH == 48)) {
+    static const uint8_t PROGMEM init4d[] = {
+      SSD1306_SETCOMPINS,                 // 0xDA
+      0x12,    // ada x12
+      SSD1306_SETCONTRAST };              // 0x81
+    ssd1306_commandList(init4d, sizeof(init4d));
+    ssd1306_command1((vccstate == SSD1306_EXTERNALVCC) ? 0x9F : 0xCF);
   } else {
     // Other screen varieties -- TBD
   }
@@ -885,6 +892,17 @@ uint8_t *Adafruit_SSD1306::getBuffer(void) {
 */
 void Adafruit_SSD1306::display(void) {
   TRANSACTION_START
+
+  #if SSD1306_LCDWIDTH == 64 && SSD1306_LCDHEIGHT == 48
+  static const uint8_t PROGMEM dlist1[] = {
+    SSD1306_PAGEADDR,
+    0,                         // Page start address
+    (SSD1306_LCDHEIGHT / 8) - 1, // Page end (not really, but works here)
+    SSD1306_COLUMNADDR,
+    32 };                       // Column start address
+  ssd1306_commandList(dlist1, sizeof(dlist1));
+  ssd1306_command1(32 + SSD1306_LCDWIDTH - 1); // Column end address
+  #else
   static const uint8_t PROGMEM dlist1[] = {
     SSD1306_PAGEADDR,
     0,                         // Page start address
@@ -893,6 +911,7 @@ void Adafruit_SSD1306::display(void) {
     0 };                       // Column start address
   ssd1306_commandList(dlist1, sizeof(dlist1));
   ssd1306_command1(WIDTH - 1); // Column end address
+  #endif
 
 #if defined(ESP8266)
   // ESP8266 needs a periodic yield() call to avoid watchdog reset.
